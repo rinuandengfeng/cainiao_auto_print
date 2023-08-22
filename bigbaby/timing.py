@@ -4,7 +4,7 @@ import time
 
 
 def cainiao_start(cainiao_obj):
-    schedule.every(30).minutes.do(cainiao_obj.cainiao_login)
+    schedule.every(1).hours.do(cainiao_obj.cainiao_login)
 
     schedule.every().day.at("09:45").do(cainiao_obj.start, "10:00:00", 10, 200, "大秒杀")
     schedule.every().day.at("09:50").do(cainiao_obj.start, "10:00:00", 3, 9, "大秒杀")

@@ -18,11 +18,10 @@ class CaiNiao():
     def get_browser_context(self, playwright, headless=False):
         
         browser = playwright.chromium.launch(headless=headless,
-                                                args=['--start-maximized'])
+                                                args=['--start-maximized'], timeout=6030000)
         # 时区待设置
         context = browser.new_context(storage_state="./auth/cainiao_state.json", no_viewport=True)
-        # 等待时间设置为100分钟 ，防止网络不好时，抛出超时错误
-        context.set_default_timeout(6030000)
+        # 等待时间设置为2分钟30秒 ，防止网络不好时，抛出超时错误
         return context
 
     # windows7 菜鸟登陆
@@ -110,7 +109,6 @@ class CaiNiao():
         """
         # 全部选中要汇单的单子
         page.check("input[type=\"checkbox\"]")
-        # page.wait_for_timeout(7000)
         # 点击汇单
         page.click("button:has-text(\"汇单\")")
 
