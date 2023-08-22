@@ -6,9 +6,9 @@ password = global_config.get("info","password")
 express = global_config.get("info","express")
 print_name = global_config.get("info","print_name")
 cn = CaiNiao(username,password,print_name,express)
-# cn.start("18:00:00",1,2,"散单-前置")
-# # cn.testa(6)
-cn.cainiao_login()
+# # # cn.start("18:00:00",1,2,"散单-前置")
+cn.test()
+# cn.cainiao_login()
 
 # from playwright.sync_api import  sync_playwright
 # import time

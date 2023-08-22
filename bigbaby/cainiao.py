@@ -1,6 +1,7 @@
 from playwright.sync_api import  sync_playwright
 import datetime
 from configs.logs import logger
+from configs.untill import get_express_initial
 
 class CaiNiao():
     def __init__(self, username, password, print_name, express):
@@ -12,6 +13,7 @@ class CaiNiao():
         self.password = password
         self.print_name = print_name
         self.express = express
+        self.express_initial = get_express_initial(self.express)
 
     def get_browser_context(self, playwright, headless=False):
         
@@ -42,13 +44,14 @@ class CaiNiao():
         # 设置单子的数量
         self.__set_wave_num(page, start_num, over_num)
         # 设置快递
-        self.__set_express(page)
+        self.__select_express(page)
         # 设置汇单方式
         self.__set_wave_type(page, wave_type)
         logger.info("今天"+over_time +"的" + self.express + wave_type + str(start_num) +" - " + str(over_num) + "汇单完成")
 
     # 打印单子
     def __print_list(self, page, pick_list=False):
+        page.goto("https://cwoutprod.cainiao.com/pickbill")
         # 打印面单
         self.__express_sheet_print(page)
         # 打印拣选单
@@ -131,17 +134,35 @@ class CaiNiao():
         page.click("button:has-text(\"确定\")")
         page.wait_for_timeout(30000)
 
+    
+    def __select_express(self,page):
+        """
+        在汇单页面中选择汇单的快递
+        
+        """
+        page.click("text=快递公司请选择 >> i")
+
+        page.click("[placeholder=\"请输入查询\"]")
+
+        page.fill("[placeholder=\"请输入查询\"]", self.express)
+        
+        page.check("text="+ self.express_initial[0] + self.express +" >> input[type=\"checkbox\"]")
+        
+        page.click("button:has-text(\"查询\")")
+        page.wait_for_timeout(7000)
+
+
+
     def __express_sheet_print(self, page):
         """
         将拣选制单中的面单全部打印出来
         """
-        page.goto("https://cwoutprod.cainiao.com/pickbill")
 
         # 等待10秒防止有些汇的单子没有到拣选制单页面
         logger.info("开始打印面单...")
         page.wait_for_timeout(10000)
 
-        page.click("button:has-text(\"查询\")")
+        self.__select_express(page)
         # 选中要打的单子
         page.check("input[type=\"checkbox\"]")
         # 打印出面单
@@ -160,7 +181,7 @@ class CaiNiao():
         全部打出，所以需要在汇单子时，进行分类汇单
         """
         logger.info("开始打印拣选单...")
-        page.click("button:has-text(\"查询\")")
+        self.__select_express(page)
         page.wait_for_timeout(7000)
         page.check("input[type=\"checkbox\"]")
 
@@ -177,7 +198,7 @@ class CaiNiao():
         """
         制单完成
         """
-        page.click("button:has-text(\"查询\")")
+        self.__select_express(page)
         page.wait_for_timeout(7000)
         page.check("input[type=\"checkbox\"]")
         # 完成制单
@@ -219,3 +240,9 @@ class CaiNiao():
                 self.__print_list(print_page, pick_list=True)
             else:
                 self.__print_list(print_page, pick_list=False)
+
+
+
+            
+
+
