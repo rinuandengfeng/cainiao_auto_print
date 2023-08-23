@@ -2,17 +2,14 @@ import logging
 
 import logging.handlers
 import os
-
-import datetime
 from time import strftime
 
-#日志文件名
-LOG_FILENAME = strftime("logs\\%Y-%m-%d.log")
 
 
 #日志函数
 def set_log():
-
+    #日志文件名
+    LOG_FILENAME = strftime("logs\\%Y-%m-%d.log")
     #创建记录器对象
     logger = logging.getLogger()
     #目录
@@ -28,7 +25,7 @@ def set_log():
 
     #创建文本处理器
     file_handler = logging.handlers.TimedRotatingFileHandler(LOG_FILENAME,
-            atTime = datetime.time(0,0,0,0),encoding='utf-8')
+            when="D", interval=1, backupCount=30 ,encoding='utf-8')
   
     file_handler.setFormatter(formatter)
 
