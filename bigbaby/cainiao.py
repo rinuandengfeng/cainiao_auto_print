@@ -183,7 +183,7 @@ class CaiNiao():
 
         page.click("button:has-text(\"查询\")")
 
-        page.wait_for_timeout(7000)
+        page.wait_for_timeout(5000)
         page.check("input[type=\"checkbox\"]")
 
         # 打印出拣选单  
@@ -200,7 +200,7 @@ class CaiNiao():
         制单完成
         """
         page.click("button:has-text(\"查询\")")
-        page.wait_for_timeout(7000)
+        page.wait_for_timeout(5000)
         page.check("input[type=\"checkbox\"]")
         # 完成制单
         logger.info("完成制单")
@@ -241,8 +241,3 @@ class CaiNiao():
                 self.__print_list(print_page, pick_list=True)
             else:
                 self.__print_list(print_page, pick_list=False)
-
-
-            
-
-
