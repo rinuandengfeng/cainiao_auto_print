@@ -33,6 +33,7 @@ class CaiNiao():
         cainiao_win7_page.frame(name="alibaba-login-box").fill("[placeholder=\"请输入登录密码\"]", self.password)
         cainiao_win7_page.frame(name="alibaba-login-box").click("button:has-text(\"登录\")")
         cainiao_win7_page.wait_for_timeout(120000)
+        
 
     # 汇单
     def __wave_list(self, page, over_time, start_num, over_num, wave_type):
@@ -179,7 +180,9 @@ class CaiNiao():
         全部打出，所以需要在汇单子时，进行分类汇单
         """
         logger.info("开始打印拣选单...")
-        self.__select_express(page)
+
+        page.click("button:has-text(\"查询\")")
+
         page.wait_for_timeout(7000)
         page.check("input[type=\"checkbox\"]")
 
@@ -196,7 +199,7 @@ class CaiNiao():
         """
         制单完成
         """
-        self.__select_express(page)
+        page.click("button:has-text(\"查询\")")
         page.wait_for_timeout(7000)
         page.check("input[type=\"checkbox\"]")
         # 完成制单
@@ -225,7 +228,7 @@ class CaiNiao():
         :return: 空值
         """
         with sync_playwright() as playwright:
-            cainiao_win7_context = self.get_browser_context(playwright, headless=True)
+            cainiao_win7_context = self.get_browser_context(playwright, headless=False)
 
             # 汇单
             wave_page = cainiao_win7_context.new_page()
@@ -238,7 +241,6 @@ class CaiNiao():
                 self.__print_list(print_page, pick_list=True)
             else:
                 self.__print_list(print_page, pick_list=False)
-
 
 
             
